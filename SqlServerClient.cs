@@ -119,7 +119,7 @@ namespace ADONetHelper.SqlServer
                 return this.Connection.WorkstationId;
             }
         }
-#if NET46 || NET461
+#if !NET20 && !NET35 && !NET40 && !NET45 && !NET451 && !NETSTANDARD1_3 
         /// <summary>
         /// Gets or sets the access token for the connection
         /// </summary>
