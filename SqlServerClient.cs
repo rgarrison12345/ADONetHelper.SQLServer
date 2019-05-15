@@ -263,12 +263,12 @@ namespace ADONetHelper.SqlServer
             //Return this back to the caller
             return new SqlBulkCopy(this.Connection);
         }
-        /// <summary>
-        /// Gets an instance of <see cref="SqlBulkCopy"/> using the passed in <paramref name="connectionString"/>
-        /// </summary>
-        /// <param name="connectionString">The connection string to connect to the database as a <see cref="string"/></param>
-        /// <returns>Returns an instance of <see cref="SqlBulkCopy"/></returns>
-        public SqlBulkCopy GetSqlBulkCopy(string connectionString)
+		/// <summary>
+		/// Gets an instance of <see cref="SqlBulkCopy"/> using the passed in <paramref name="connectionString"/>
+		/// </summary>
+		/// <param name="connectionString">The connection string to connect to the database as a <see cref="string"/></param>
+		/// <returns>Returns an instance of <see cref="SqlBulkCopy"/></returns>
+		public SqlBulkCopy GetSqlBulkCopy(string connectionString)
         {
             //Return this back to the caller
             return new SqlBulkCopy(connectionString);
