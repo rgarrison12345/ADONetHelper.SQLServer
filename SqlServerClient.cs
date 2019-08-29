@@ -1,6 +1,6 @@
 #region Licenses
 /*MIT License
-Copyright(c) 2018
+Copyright(c) 2019
 Robert Garrison
 
 Permission Is hereby granted, free Of charge, To any person obtaining a copy
@@ -26,10 +26,12 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Data;
+#if NET451 || NETSTANDARD1_3 || NETCOREAPP2_0
 using System.Data.SqlClient;
-#if !NET20 && !NET35 && !NET40
-using System.Threading.Tasks;
+#else
+using Microsoft.Data.SqlClient;
 #endif
+using System.Threading.Tasks;
 using System.Xml;
 #endregion
 
@@ -119,7 +121,7 @@ namespace ADONetHelper.SqlServer
                 return this.Connection.WorkstationId;
             }
         }
-#if !NET20 && !NET35 && !NET40 && !NET45 && !NET451 && !NETSTANDARD1_3 
+#if !NET451 && !NETSTANDARD1_3
         /// <summary>
         /// Gets or sets the access token for the connection
         /// </summary>
@@ -137,7 +139,6 @@ namespace ADONetHelper.SqlServer
             }
         }
 #endif
-#if !NET20 && !NET35 && !NET40
         /// <summary>
         /// The connection ID of the most recent connection attempt, regardless of whether the attempt succeeded or failed.
         /// </summary>
@@ -150,7 +151,6 @@ namespace ADONetHelper.SqlServer
                 return this.Connection.ClientConnectionId;
             }
         }
-#endif
         #endregion
         #region Constructors
         /// <summary>
@@ -223,7 +223,6 @@ namespace ADONetHelper.SqlServer
                 }
             }
         }
-#if !NET20 && !NET35 && !NET40
         /// <summary>
         /// Returns an instance of <see cref="XmlReader"/> based on the <paramref name="query"/>
         /// </summary>
@@ -246,7 +245,6 @@ namespace ADONetHelper.SqlServer
                 }
             }
         }
-#endif
         /// <summary>
         /// All statistics are set to zero if <see cref="SqlConnection.StatisticsEnabled"/> is <c>true</c>
         /// </summary>
@@ -263,12 +261,12 @@ namespace ADONetHelper.SqlServer
             //Return this back to the caller
             return new SqlBulkCopy(this.Connection);
         }
-		/// <summary>
-		/// Gets an instance of <see cref="SqlBulkCopy"/> using the passed in <paramref name="connectionString"/>
-		/// </summary>
-		/// <param name="connectionString">The connection string to connect to the database as a <see cref="string"/></param>
-		/// <returns>Returns an instance of <see cref="SqlBulkCopy"/></returns>
-		public SqlBulkCopy GetSqlBulkCopy(string connectionString)
+        /// <summary>
+        /// Gets an instance of <see cref="SqlBulkCopy"/> using the passed in <paramref name="connectionString"/>
+        /// </summary>
+        /// <param name="connectionString">The connection string to connect to the database as a <see cref="string"/></param>
+        /// <returns>Returns an instance of <see cref="SqlBulkCopy"/></returns>
+        public SqlBulkCopy GetSqlBulkCopy(string connectionString)
         {
             //Return this back to the caller
             return new SqlBulkCopy(connectionString);
