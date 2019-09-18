@@ -26,11 +26,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Data;
-#if NET451 || NETSTANDARD1_3 || NETCOREAPP2_0
 using System.Data.SqlClient;
-#else
-using Microsoft.Data.SqlClient;
-#endif
 using System.Threading.Tasks;
 using System.Xml;
 #endregion
