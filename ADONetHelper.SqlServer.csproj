@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFrameworks>netcoreapp2.1;netcoreapp2.0;netstandard2.0;netstandard1.3;net46;net451;</TargetFrameworks>
+    <TargetFrameworks>netcoreapp3.0;netcoreapp2.1;netcoreapp2.0;netstandard2.0;netstandard1.3;net461;net46;net451;</TargetFrameworks>
     <EnableDefaultCompileItems>true</EnableDefaultCompileItems>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <PackageLicenseUrl>https://github.com/rgarrison12345/ADONetHelper.SQLServer/blob/master/LICENSE.md</PackageLicenseUrl>
@@ -8,7 +8,7 @@
     <RepositoryUrl>https://github.com/rgarrison12345/ADONetHelper.SQLServer.git</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
-    <Version>1.8.4</Version>
+    <Version>1.9.0</Version>
     <PackageTags>SQLServer System.Data.SqlClient Microsoft.Data.SqlClient ORM ADO.NET ADO SQL .NET Database RDBMS Generic DAL ANSI</PackageTags>
     <Authors>Robert Garrison</Authors>
     <Company>Robert Garrison</Company>
@@ -18,7 +18,7 @@
     <IncludeSource>true</IncludeSource>
     <IncludeSymbols>true</IncludeSymbols>
     <Description>Extends ADONetHelper library for SQL Server</Description>
-    <PackageReleaseNotes>Updating to ADONetHelper 3.3.2</PackageReleaseNotes>
+    <PackageReleaseNotes>Updating to ADONetHelper 3.3.2, Updating to System.Data.SqlClient 4.7.0, adding .net core app 3.0 and .net framework 4.6.1 builds</PackageReleaseNotes>
     <Copyright>Copyright © Robert Garrison 2019</Copyright>
     <AssemblyName>ADONetHelper.SqlServer</AssemblyName>
     <RootNamespace>ADONetHelper.SqlServer</RootNamespace>
@@ -42,11 +42,8 @@
     <OutputPath>.\bin\Release</OutputPath>
     <DefineConstants>RELEASE;</DefineConstants>
   </PropertyGroup>
-  <ItemGroup Condition="'$(TargetFramework)'=='netstandard1.3' Or '$(TargetFramework)'=='net451' Or '$(TargetFramework)'=='netcoreapp2.0'">
-    <PackageReference Include="System.Data.SqlClient" Version="4.6.1" />
-  </ItemGroup>
-  <ItemGroup Condition="'$(TargetFramework)'=='netstandard2.0' Or '$(TargetFramework)'=='net46' Or '$(TargetFramework)'=='netcoreapp2.1'">
-    <PackageReference Include="System.Data.SqlClient" Version="4.6.1" />
+  <ItemGroup Condition="'$(TargetFramework)'!='net2.0' And '$(TargetFramework)'!='net35' And '$(TargetFramework)'!='net40' And '$(TargetFramework)'!='net45' And '$(TargetFramework)'!='net451'">
+    <PackageReference Include="System.Data.SqlClient" Version="4.7.0" />
   </ItemGroup>
   <ItemGroup>
     <None Include="LICENSE.md" Pack="true" PackagePath="LICENSE.md" />
