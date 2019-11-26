@@ -22,11 +22,14 @@ OUT Of Or In CONNECTION With THE SOFTWARE Or THE USE Or OTHER DEALINGS In THE
 SOFTWARE*/
 #endregion
 #region Using Statements
+using ADONetHelper.Core;
+using Microsoft.Data.SqlClient;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Data;
-using System.Data.SqlClient;
+using System.Security;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Xml;
 #endregion
@@ -38,7 +41,7 @@ namespace ADONetHelper.SqlServer
     /// </summary>
     /// <seealso cref="DbClient"/>
     /// <seealso cref="IXMLExecutor"/>
-    public class SqlServerClient : DbClient, IXMLExecutor
+    public class SqlServerClient : DbClient
     {
         #region Events
         /// <summary>
@@ -49,17 +52,17 @@ namespace ADONetHelper.SqlServer
             add
             {
                 //Get an exclusive lock first
-                lock (this.ExecuteSQL.Connection)
+                lock (ExecuteSQL.Connection)
                 {
-                    this.Connection.InfoMessage += value;
+                    Connection.InfoMessage += value;
                 }
             }
             remove
             {
                 //Get an exclusive lock first
-                lock (this.ExecuteSQL.Connection)
+                lock (ExecuteSQL.Connection)
                 {
-                    this.Connection.InfoMessage -= value;
+                    Connection.InfoMessage -= value;
                 }
             }
         }
@@ -74,7 +77,7 @@ namespace ADONetHelper.SqlServer
             get
             {
                 //Return this back to the caller
-                return (SqlConnection)this.ExecuteSQL.Connection;
+                return (SqlConnection)ExecuteSQL.Connection;
             }
         }
         /// <summary>
@@ -86,11 +89,11 @@ namespace ADONetHelper.SqlServer
             get
             {
                 //Return this back to the caller
-                return this.Connection.StatisticsEnabled;
+                return Connection.StatisticsEnabled;
             }
             set
             {
-                this.Connection.StatisticsEnabled = value;
+                Connection.StatisticsEnabled = value;
             }
         }
         /// <summary>
@@ -102,7 +105,24 @@ namespace ADONetHelper.SqlServer
             get
             {
                 //Return this back to the caller
-                return this.Connection.PacketSize;
+                return Connection.PacketSize;
+            }
+        }
+        /// <summary>
+        /// Gets or sets a value indicating whether [fire information message event on user errors].
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if [fire information message event on user errors]; otherwise, <c>false</c>.
+        /// </value>
+        public bool FireInfoMessageEventOnUserErrors
+        {
+            get
+            {
+                return Connection.FireInfoMessageEventOnUserErrors;
+            }
+            set
+            {
+                Connection.FireInfoMessageEventOnUserErrors = value;
             }
         }
         /// <summary>
@@ -114,10 +134,9 @@ namespace ADONetHelper.SqlServer
             get
             {
                 //Return this back to the caller
-                return this.Connection.WorkstationId;
+                return Connection.WorkstationId;
             }
         }
-#if !NET451 && !NETSTANDARD1_3
         /// <summary>
         /// Gets or sets the access token for the connection
         /// </summary>
@@ -127,14 +146,13 @@ namespace ADONetHelper.SqlServer
             get
             {
                 //Return this back to the caller
-                return this.Connection.AccessToken;
+                return Connection.AccessToken;
             }
             set
             {
-                this.Connection.AccessToken = value;
+                Connection.AccessToken = value;
             }
         }
-#endif
         /// <summary>
         /// The connection ID of the most recent connection attempt, regardless of whether the attempt succeeded or failed.
         /// </summary>
@@ -144,7 +162,7 @@ namespace ADONetHelper.SqlServer
             get
             {
                 //Return this back to the caller
-                return this.Connection.ClientConnectionId;
+                return Connection.ClientConnectionId;
             }
         }
         #endregion
@@ -187,16 +205,17 @@ namespace ADONetHelper.SqlServer
         {
         }
         #endregion
-        #region Utility Methods        
+        #region Utility Methods
         /// <summary>
         /// Empties the connection pool associated with this instance of <see cref="SqlServerClient"/> <see cref="SqlConnection"/>
         /// </summary>
         /// <remarks>
-        /// ClearPool clears the connection pool that is associated with the current <see cref="SqlConnection"/>. If additional connections associated with connection are in use at the time of the call, they are marked appropriately and are discarded (instead of being returned to the pool) when Close is called on them.</remarks>
+        /// ClearPool clears the connection pool that is associated with the current <see cref="SqlConnection"/>. If additional connections associated with connection are in use at the time of the call, they are marked appropriately and are discarded (instead of being returned to the pool) when Close is called on them.
+        /// </remarks>
         public void ClearPool()
         {
             //Clear the current pool
-            SqlConnection.ClearPool(this.Connection);
+            SqlConnection.ClearPool(Connection);
         }
         /// <summary>
         /// Returns an instance of <see cref="XmlReader"/> based on the <paramref name="query"/>
@@ -206,7 +225,7 @@ namespace ADONetHelper.SqlServer
         public XmlReader ExecuteXMLReader(string query)
         {
             //Wrap this in a using statement to automatically dispose of resources
-            using (SqlCommand command = (SqlCommand)this.ExecuteSQL.Factory.GetDbCommand(this.QueryCommandType, query, this.ExecuteSQL.Parameters, this.Connection, this.CommandTimeout))
+            using (SqlCommand command = (SqlCommand)ExecuteSQL.Factory.GetDbCommand(QueryCommandType, query, ExecuteSQL.Parameters, Connection, CommandTimeout))
             {
                 try
                 {
@@ -222,17 +241,18 @@ namespace ADONetHelper.SqlServer
         /// <summary>
         /// Returns an instance of <see cref="XmlReader"/> based on the <paramref name="query"/>
         /// </summary>
+        /// <param name="token">Structure object that propagates notification that operations should be canceled.</param>
         /// <param name="query">The query command text Or name of stored procedure to execute against the data store</param>
         /// <returns>Returns an instance of <see cref="XmlReader"/> based on the <paramref name="query"/> passed into the routine</returns>
-        public async Task<XmlReader> ExecuteXMLReaderAsync(string query)
+        public async Task<XmlReader> ExecuteXMLReaderAsync(string query, CancellationToken token = default)
         {
             //Wrap this in a using statement to automatically dispose of resources
-            using (SqlCommand command = (SqlCommand)this.ExecuteSQL.Factory.GetDbCommand(this.QueryCommandType, query, this.ExecuteSQL.Parameters, this.Connection, this.CommandTimeout))
+            using (SqlCommand command = (SqlCommand)ExecuteSQL.Factory.GetDbCommand(QueryCommandType, query, ExecuteSQL.Parameters, Connection, CommandTimeout))
             {
                 try
                 {
                     //Return this back to the caller
-                    return await command.ExecuteXmlReaderAsync();
+                    return await command.ExecuteXmlReaderAsync(token).ConfigureAwait(false);
                 }
                 finally
                 {
@@ -246,7 +266,7 @@ namespace ADONetHelper.SqlServer
         /// </summary>
         public void ResetStatistics()
         {
-            this.Connection.ResetStatistics();
+            Connection.ResetStatistics();
         }
         /// <summary>
         /// Gets an instance of <see cref="SqlBulkCopy"/> based off of the existing <see cref="SqlConnection"/> being used by the instance
@@ -255,7 +275,7 @@ namespace ADONetHelper.SqlServer
         public SqlBulkCopy GetSQLBulkCopy()
         {
             //Return this back to the caller
-            return new SqlBulkCopy(this.Connection);
+            return new SqlBulkCopy(Connection);
         }
         /// <summary>
         /// Gets an instance of <see cref="SqlBulkCopy"/> using the passed in <paramref name="connectionString"/>
@@ -287,7 +307,26 @@ namespace ADONetHelper.SqlServer
         public SqlBulkCopy GetSQLBulkCopy(SqlBulkCopyOptions options, SqlTransaction transaction)
         {
             //Return this back to the caller
-            return new SqlBulkCopy(this.Connection, options, transaction);
+            return new SqlBulkCopy(Connection, options, transaction);
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="connectionString"></param>
+        /// <param name="newPassword"></param>
+        public void ChangePassword(string connectionString, string newPassword)
+        {
+            SqlConnection.ChangePassword(connectionString, newPassword);
+        }
+        /// <summary>
+        /// Changes the password.
+        /// </summary>
+        /// <param name="connectionString">The connection string.</param>
+        /// <param name="credential">The credential.</param>
+        /// <param name="password">The password.</param>
+        public void ChangePassword(string connectionString, SqlCredential credential, SecureString password)
+        {
+            SqlConnection.ChangePassword(connectionString, credential, password);
         }
         /// <summary>
         /// Returns a name value pair collection of statistics at the point in time the method is called
@@ -299,7 +338,7 @@ namespace ADONetHelper.SqlServer
         public IDictionary GetConnectionStatistics()
         {
             //Return this back to the caller
-            return this.Connection.RetrieveStatistics();
+            return Connection.RetrieveStatistics();
         }
         #endregion
     }
