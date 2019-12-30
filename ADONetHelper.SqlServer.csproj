@@ -8,7 +8,7 @@
     <RepositoryType>git</RepositoryType>
     <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
     <Version>2.1.1</Version>
-    <PackageTags>SQLServer System.Data.SqlClient Microsoft.Data.SqlClient ORM ADO.NET ADO SQL .NET Database RDBMS Generic DAL ANSI</PackageTags>
+    <PackageTags>SQLServer Microsoft.Data.SqlClient ORM ADO.NET ADO SQL .NET Database RDBMS Generic DAL ANSI</PackageTags>
     <Authors>Robert Garrison</Authors>
     <Company>Robert Garrison</Company>
     <Product>ADONetHelper.SqlServer</Product>
@@ -48,8 +48,5 @@
   <ItemGroup>
     <PackageReference Include="ADONetHelper" Version="4.0.2" />
     <PackageReference Include="Microsoft.Data.SqlClient" Version="1.1.0" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\ADONetHelper\ADONetHelper\ADONetHelper.csproj" />
   </ItemGroup>
 </Project>
