@@ -7,7 +7,7 @@
     <RepositoryUrl>https://github.com/rgarrison12345/ADONetHelper.SQLServer.git</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
-    <Version>2.1.2</Version>
+    <Version>2.1.3</Version>
     <PackageTags>SQLServer Microsoft.Data.SqlClient ORM ADO.NET ADO SQL .NET Database RDBMS Generic DAL ANSI</PackageTags>
     <Authors>Robert Garrison</Authors>
     <Company>Robert Garrison</Company>
@@ -17,8 +17,8 @@
     <IncludeSource>true</IncludeSource>
     <IncludeSymbols>true</IncludeSymbols>
     <Description>Extends ADONetHelper library for SQL Server</Description>
-    <PackageReleaseNotes>Updating to ADONetHelper 4.0.4</PackageReleaseNotes>
-    <Copyright>Copyright © Robert Garrison 2019</Copyright>
+    <PackageReleaseNotes>Updating to ADONetHelper 4.0.8</PackageReleaseNotes>
+    <Copyright>Copyright © Robert Garrison 2020</Copyright>
     <AssemblyName>ADONetHelper.SqlServer</AssemblyName>
     <RootNamespace>ADONetHelper.SqlServer</RootNamespace>
     <DocumentationFile>bin\$(Configuration)\$(TargetFramework)\ADONetHelper.SqlServer.xml</DocumentationFile>
@@ -46,7 +46,7 @@
     <None Include="LICENSE.md" Pack="true" PackagePath="LICENSE.md" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="ADONetHelper" Version="4.0.4" />
+    <PackageReference Include="ADONetHelper" Version="4.0.8" />
     <PackageReference Include="Microsoft.Data.SqlClient" Version="1.1.0" />
   </ItemGroup>
 </Project>
