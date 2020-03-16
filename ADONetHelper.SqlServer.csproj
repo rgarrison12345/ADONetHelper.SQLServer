@@ -17,7 +17,7 @@
     <IncludeSource>true</IncludeSource>
     <IncludeSymbols>true</IncludeSymbols>
     <Description>Extends ADONetHelper library for SQL Server</Description>
-    <PackageReleaseNotes>Updating to ADONetHelper 4.0.8 and Microsoft.Data.SqlClient to 1.1.1</PackageReleaseNotes>
+    <PackageReleaseNotes>Updating to ADONetHelper 4.0.8</PackageReleaseNotes>
     <Copyright>Copyright © Robert Garrison 2020</Copyright>
     <AssemblyName>ADONetHelper.SqlServer</AssemblyName>
     <RootNamespace>ADONetHelper.SqlServer</RootNamespace>
@@ -47,6 +47,6 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="ADONetHelper" Version="4.0.8" />
-    <PackageReference Include="Microsoft.Data.SqlClient" Version="1.1.1" />
+    <PackageReference Include="Microsoft.Data.SqlClient" Version="1.1.0" />
   </ItemGroup>
 </Project>
